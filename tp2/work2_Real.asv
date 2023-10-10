@@ -44,7 +44,7 @@ energy = zeros(numFrames, 1); %put everything at zero
 zeroCrossingRate = zeros(numFrames, 1); %put everything at zero
 f0 = zeros(numFrames, 1); %put everything at zero
 %frame = zeros(numFrames, 1); %put everything at zero
-totalframes_em_silencio = 0;
+
 
 % Perform sliding analysis
 for i = 1:numFrames
@@ -64,20 +64,17 @@ for i = 1:numFrames
     %Not 2*framesize because in this case dont give as 2, but instead 1
 
     % Calculate fundamental frequency using autocorrelation
-    [f0(i), totalframes_em_silencio] = calculateF0Autocorrelation(frame, newFs, totalframes_em_silencio);
+    f0(i) = calculateF0Autocorrelation(frame, newFs);
     
 end
 figure(2); plot(10*log(energy),'color', dark_green); xlabel("Frame"); ylabel('Energia (dB)'); grid on; title("Energia por Frame"); drawnow;
 figure(3); plot(zeroCrossingRate, 'color', dark_green); xlabel("Frame"); ylabel('Crossing Rate'); grid on; title("Crossing Rate por Frame"); drawnow;
 figure(4); plot(f0, 'color', dark_green); xlabel("Frame"); ylabel('Frequency'); grid on; title("Fundamental frequency (f0)"); drawnow;
-figure(5); plot(t_y, f0, 'color', dark_green); xlabel("Frame"); ylabel('Frequency'); grid on; title("Fundamental frequency in y(f0)"); drawnow;
 
-
-fprintf("Total de frames em silencio %f \n", totalframes_em_silencio);
 fprintf("End of the program.\n")
 
 % Define a function to calculate F0 using autocorrelation
-function [f0, totalframes_em_silencio] = calculateF0Autocorrelation(frame, fs, totalframes_em_silencio)
+function f0 = calculateF0Autocorrelation(frame, fs)
 % We need to search the second peak, because the first peak is always 0 
 % The voice of man is between 70 and 250 Hz, so we need to find the peak in this interval
 
@@ -101,9 +98,9 @@ function [f0, totalframes_em_silencio] = calculateF0Autocorrelation(frame, fs, t
 
     % Calculate F0 using the index
     f0 = fs / maxIdx;
-    
+
     if(f0>250)
-        totalframes_em_silencio = totalframes_em_silencio + 1;
+        f0 = 0;
     end
 end
 
