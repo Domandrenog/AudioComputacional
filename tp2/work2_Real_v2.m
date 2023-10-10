@@ -76,7 +76,7 @@ function f0 = calculateF0Autocorrelation(frame, fs)
 % The voice of man is between 70 and 250 Hz, so we need to find the peak in this interval
 
    fo_min = 70; %Hz
-   fo_max = 250; %Hz
+   fo_max = 1000; %Hz
 
 
     % Calculate autocorrelation
@@ -92,7 +92,7 @@ function f0 = calculateF0Autocorrelation(frame, fs)
     f0 = fs / (maxIdx + floor((1/fo_max)*fs)); %Somar estes pois foram cortados do index, logo ainda são necessarios para ter o index correto
     
     %if f0 > 245 || f0 < 71
-        f0 = 150;
+        %f0 = 150;
     %end
 
 end
