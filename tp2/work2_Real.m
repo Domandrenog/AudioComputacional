@@ -26,6 +26,8 @@ t_y = (0:length(y) - 1) / newFs; % Time for the
 figure(1); 
 subplot(2, 1, 1); plot(t_x, x, 'color', dark_green); xlabel('Tempo (s)'); ylabel('Amplitude'); grid on; title('Sinal Original'); xlim([0 21]);
 subplot(2, 1, 2); plot(t_y, y, 'color', dark_green); xlabel('Tempo (s)'); ylabel('Amplitude'); grid on; title('Sinal Após o Downsampling'); xlim([0 21]);
+
+
 % Define analysis parameters
 frameduration = 0.03;                              % 30ms  -> good for audio
 framestep = 0.01;                                  % 10 ms -> 1/3 of the window, to be uniform like this ---------, if not can be like this /---\
