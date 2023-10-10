@@ -44,7 +44,7 @@ energy = zeros(numFrames, 1); %put everything at zero
 zeroCrossingRate = zeros(numFrames, 1); %put everything at zero
 f0 = zeros(numFrames, 1); %put everything at zero
 %frame = zeros(numFrames, 1); %put everything at zero
-
+number_frame = 0;
 % Perform sliding analysis
 for i = 1:numFrames
     startIdx = floor((i - 1) * (frameSize - overlap) + 1); %Define where the variable starts to save, so needs to be in this case 10 in 10, so the first index is 1 then 11,21,31
@@ -63,7 +63,7 @@ for i = 1:numFrames
     %Not 2*framesize because in this case dont give as 2, but instead 1
 
     % Calculate fundamental frequency using autocorrelation
-    f0(i) = calculateF0Autocorrelation(frame, newFs);
+    [f0(i), number_frame] = calculateF0Autocorrelation(frame, newFs, number_frame);
     
 end
 
@@ -80,7 +80,7 @@ fprintf("End of the program.\n")
 % Define a function to calculate F0 using autocorrelation
 function [f0, number_frame] = calculateF0Autocorrelation(frame, fs, number_frame)
     autocorr = xcorr(frame);
-    fprintf("\nLength frame: %d\nLength corr: %d", length(frame), length(autocorr));
+    fprintf("\nFra,e: %d\n\nLength frame: %d\nLength corr: %d\n",number_frame, length(frame), length(autocorr));
     
     dark_blue = 1/255 * [3,37,126];
 
@@ -92,7 +92,7 @@ function [f0, number_frame] = calculateF0Autocorrelation(frame, fs, number_frame
 
     
     % Calculate autocorrelation
-    autocorr2 = autocorr(length(frame) + floor(fs/fo_max) :length(frame) + floor(fs/fo_min));
+    autocorr2 = autocorr(length(frame) + floor(fs/fo_max) :end);
 
 
     % Find the index of the maximum peak in the autocorrelation function
