@@ -67,41 +67,29 @@ for i = 1:numFrames
     % f0_pitch(i) = pitch(frame,newFs);
     
 end
-fprintf("DEBUG: numero de frames: %d | tamanho energia: %d\n", numFrames, length(energy))
 aux = (1:length(energy)) .* framestep;
 
 % Energy plot
 figure(2); plot(aux, 10*log(energy),'color', dark_green); xlabel("Tempo (s)"); ylabel('Energia (dB)'); grid on; title("Energia por Frame"); xlim([0 21]); drawnow;
 
 % Zero crossing plot
-figure(3); plot(aux, zeroCrossingRate, 'x', 'color', dark_green); xlabel("Tempo (s)"); ylabel('Taxa de passagem'); grid on; title("Taxa de passagem por zero em cada janela"); xlim([0 21]); drawnow;
+figure(3); plot(aux, zeroCrossingRate, '.', 'color', dark_green); xlabel("Tempo (s)"); ylabel('Taxa de passagem'); grid on; title("Taxa de passagem por zero em cada janela"); xlim([0 21]); drawnow;
 zeroCrossingRate_filtered = medfilt1(zeroCrossingRate, 5);
-figure(4); plot(aux, zeroCrossingRate_filtered, '.', 'color', dark_blue); xlabel("Tempo (s)"); ylabel('Taxa de passagem'); grid on; title("Taxa de passagem por zero em cada janela"); xlim([0 21]); drawnow;
+figure(4); plot(aux, zeroCrossingRate_filtered, '.', 'color', dark_blue); xlabel("Tempo (s)"); ylabel('Taxa de passagem'); grid on; title("Taxa de passagem por zero em cada janela após filtro mediana"); xlim([0 21]); drawnow;
 
 
 % Fundamental Freq. Plot
-figure(5); plot(aux, f0, 'x', 'color', dark_blue); xlabel("Frame"); ylabel('Frequency'); grid on; title("Fundamental frequency (f0)"); xlim([0 21]); drawnow;
-f0_filterd = medfilt1(zeroCrossingRate, 5);
-figure(6); plot(aux, f0_filterd, '.', 'color', dark_blue); xlabel("Frame"); ylabel('Frequency'); grid on; title("Fundamental frequency (f0)"); xlim([0 21]); drawnow;
-
-
-
+figure(5); plot(aux, f0, '.', 'color', dark_blue); xlabel("Frame"); ylabel('Frequency'); grid on; title("Frequência Fundamental por janela"); xlim([0 21]); drawnow;
+f0_filterd = medfilt1(f0, 20);
+absDiff = abs(f0 - f0_filterd);
+f0_filterd(absDiff > 50) = NaN;
+figure(6); plot(aux, f0_filterd, '.', 'color', dark_green); xlabel("Frame"); ylabel('Frequency'); grid on; title("Frequência Fundamental por janela após filtro"); xlim([0 21]); drawnow;
+fprintf("\nValor médio f0: %.2f\n", mean(f0( (f0<150) & (f0>70))));
 
 binEdges = 50:10:400;
-figure(7); histogram(f0, binEdges, 'FaceColor', dark_blue); xlabel('Frequênciac Fundamental'); ylabel('Occorência em Frames'); title('Ocurrência de valores de F0');
-% histogram(f0_pitch, binEdges, 'FaceColor', dark_blue); xlabel('Frequênciac Fundamental'); ylabel('Occorência em Frames'); title('Ocurrência de valores de F0');
+figure(7); histogram(f0, binEdges, 'FaceColor', dark_blue); xlabel('Frequência Fundamental'); ylabel('Occorência em Janelas'); title('Ocurrência de valores de F0');
 
 fprintf("End of the program.\n")
-
-
-function filteredVector = filterVector(vector, window, th)
-    windowSize = window;  
-    filteredVector = medfilt1(vector, windowSize);
-    absDiff = abs(vector - filteredVector);
-    threshold = th;  % Adjust as needed
-    
-    %filteredVector(absDiff > threshold) = 0;  
-end
 
 
 % Define a function to calculate F0 using autocorrelation
@@ -109,6 +97,7 @@ function [f0, number_frame] = calculateF0Autocorrelation(frame, fs, number_frame
     autocorr = xcorr(frame);
     
     dark_blue = 1/255 * [3,37,126];
+    dark_green = 1/255 * [0,100,0];
 
 
     % We need to search the second peak, because the first peak is always 0 
@@ -128,8 +117,8 @@ function [f0, number_frame] = calculateF0Autocorrelation(frame, fs, number_frame
     number_frame = number_frame + 1;
     if(number_frame==1281)
         figure(10); 
-        subplot(1,2,1); plot(autocorr, 'color', dark_blue); xlabel("Indice"); ylabel("Magnitude"); title("Corr. frame 1281");
-        subplot(1,2,2); plot((length(frame) + floor(fs/fo_max) : length(autocorr)) ,autocorr(length(frame) + floor(fs/fo_max) : length(autocorr)), 'color', dark_blue); xlabel("Indice"); ylabel("Magnitude"); title("Corr. frame 1281 cortada");
+        subplot(2,1,1); plot(autocorr, 'color', dark_blue, 'LineWidth', 1.5); xlabel("Indice"); ylabel("Magnitude"); title("Corr. frame 1281"); grid on;
+        subplot(2,1,2); plot((length(frame) + floor(fs/fo_max) : length(autocorr)) ,autocorr(length(frame) + floor(fs/fo_max) : length(autocorr)), 'color', dark_green, 'LineWidth', 1.5); xlabel("Indice"); ylabel("Magnitude"); title("Corr. frame 1281 cortada"); grid on;
     end
 
 

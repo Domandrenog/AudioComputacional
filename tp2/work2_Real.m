@@ -34,7 +34,6 @@ framestep = 0.01;                                  % 10 ms -> 1/3 of the window,
 frameSize = frameduration * newFs;                 % Size of analysis frame in samples
 overlap = (frameduration - framestep) * newFs;     % Overlap between frames in samples
 window = hamming(frameSize);                       % Windowing function - in this case Hamming, can be rectangular
-fprintf("Fsize: %d, overlap: %f, ", frameSize, overlap);
 % Initialize variables to store short-term characteristics
 numFrames = floor((length(y) - overlap) / (frameSize - overlap)); %Know number of frames
 
@@ -67,7 +66,6 @@ for i = 1:numFrames
     % f0_pitch(i) = pitch(frame,newFs);
     
 end
-fprintf("DEBUG: numero de frames: %d | tamanho energia: %d\n", numFrames, length(energy))
 aux = (1:length(energy)) .* framestep;
 
 % Energy plot
@@ -80,12 +78,15 @@ figure(4); plot(aux, zeroCrossingRate_filtered, '.', 'color', dark_blue); xlabel
 
 
 % Fundamental Freq. Plot
-figure(5); plot(aux, f0, '.', 'color', dark_green); xlabel("Frame"); ylabel('Frequency'); grid on; title("Frequência Fundamental por janela"); xlim([0 21]); drawnow;
+figure(5); plot(aux, f0, '.', 'color', dark_blue); xlabel("Frame"); ylabel('Frequency'); grid on; title("Frequência Fundamental por janela"); xlim([0 21]); drawnow;
 f0_filterd = medfilt1(f0, 20);
-figure(6); plot(aux, f0_filterd, '.', 'color', dark_blue); xlabel("Frame"); ylabel('Frequency'); grid on; title("Frequência Fundamental por janela após filtro mediana"); xlim([0 21]); drawnow;
+absDiff = abs(f0 - f0_filterd);
+f0_filterd(absDiff > 50) = NaN;
+figure(6); plot(aux, f0_filterd, '.', 'color', dark_green); xlabel("Frame"); ylabel('Frequency'); grid on; title("Frequência Fundamental por janela após filtro"); xlim([0 21]); drawnow;
+fprintf("\nValor médio f0: %.2f\n", mean(f0( (f0<150) & (f0>70))));
 
 binEdges = 50:10:400;
-figure(7); histogram(f0, binEdges, 'FaceColor', dark_blue); xlabel('Frequênciac Fundamental'); ylabel('Occorência em Frames'); title('Ocurrência de valores de F0');
+figure(7); histogram(f0, binEdges, 'FaceColor', dark_blue); xlabel('Frequência Fundamental'); ylabel('Occorência em Janelas'); title('Ocurrência de valores de F0');
 
 fprintf("End of the program.\n")
 
@@ -95,6 +96,7 @@ function [f0, number_frame] = calculateF0Autocorrelation(frame, fs, number_frame
     autocorr = xcorr(frame);
     
     dark_blue = 1/255 * [3,37,126];
+    dark_green = 1/255 * [0,100,0];
 
 
     % We need to search the second peak, because the first peak is always 0 
@@ -114,8 +116,8 @@ function [f0, number_frame] = calculateF0Autocorrelation(frame, fs, number_frame
     number_frame = number_frame + 1;
     if(number_frame==1281)
         figure(10); 
-        subplot(1,2,1); plot(autocorr, 'color', dark_blue); xlabel("Indice"); ylabel("Magnitude"); title("Corr. frame 1281");
-        subplot(1,2,2); plot((length(frame) + floor(fs/fo_max) : length(autocorr)) ,autocorr(length(frame) + floor(fs/fo_max) : length(autocorr)), 'color', dark_blue); xlabel("Indice"); ylabel("Magnitude"); title("Corr. frame 1281 cortada");
+        subplot(2,1,1); plot(autocorr, 'color', dark_blue, 'LineWidth', 1.5); xlabel("Indice"); ylabel("Magnitude"); title("Corr. frame 1281"); grid on;
+        subplot(2,1,2); plot((length(frame) + floor(fs/fo_max) : length(autocorr)) ,autocorr(length(frame) + floor(fs/fo_max) : length(autocorr)), 'color', dark_green, 'LineWidth', 1.5); xlabel("Indice"); ylabel("Magnitude"); title("Corr. frame 1281 cortada"); grid on;
     end
 
 
