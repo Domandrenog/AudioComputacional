@@ -20,21 +20,21 @@ newFs = 16000; % Target sampling rate
 y = resample(x, newFs, fs);
 % Time in the signal
 t_x = (0:length(x) - 1) / fs; % Time for original signal
-t_y = (0:length(y) - 1) / newFs; % Time for the 
+t_y = (0:length(y) - 1) / newFs; % Time for the downsample signal
 
 
 figure(1); 
-subplot(2, 1, 1); plot(t_x, x, 'color', dark_green); xlabel('Tempo (s)'); ylabel('Amplitude'); grid on; title('Sinal Original'); xlim([0 21]);
+subplot(2, 1, 1); plot(t_x, x, 'color', dark_blue); xlabel('Tempo (s)'); ylabel('Amplitude'); grid on; title('Sinal Original'); xlim([0 21]);
 subplot(2, 1, 2); plot(t_y, y, 'color', dark_green); xlabel('Tempo (s)'); ylabel('Amplitude'); grid on; title('Sinal Após o Downsampling'); xlim([0 21]);
 
 
 % Define analysis parameters
 frameduration = 0.03;                              % 30ms  -> good for audio
-framestep = 0.01;                                  % 10 ms -> 1/3 of the window, to be uniform like this ---------, if not can be like this /---\
+framestep = 0.01;                                  % 10 ms -> 1/3 of the window, to be uniform
 frameSize = frameduration * newFs;                 % Size of analysis frame in samples
-overlap = (frameduration - framestep) * newFs;     % Overlap between frames in samples - in this case 20 ms overlap -> 2/3 of the window
+overlap = (frameduration - framestep) * newFs;     % Overlap between frames in samples
 window = hamming(frameSize);                       % Windowing function - in this case Hamming, can be rectangular
-
+fprintf("Fsize: %d, overlap: %f, ", frameSize, overlap);
 % Initialize variables to store short-term characteristics
 numFrames = floor((length(y) - overlap) / (frameSize - overlap)); %Know number of frames
 
@@ -64,30 +64,49 @@ for i = 1:numFrames
 
     % Calculate fundamental frequency using autocorrelation
     [f0(i), number_frame] = calculateF0Autocorrelation(frame, newFs, number_frame);
-    f0_pitch(i) = pitch(frame,newFs);
+    % f0_pitch(i) = pitch(frame,newFs);
     
 end
+fprintf("DEBUG: numero de frames: %d | tamanho energia: %d\n", numFrames, length(energy))
+aux = (1:length(energy)) .* framestep;
 
-figure(2); plot(10*log(energy),'color', dark_green); xlabel("Frame"); ylabel('Energia (dB)'); grid on; title("Energia por Frame"); drawnow;
-figure(3); plot(zeroCrossingRate, 'color', dark_green); xlabel("Frame"); ylabel('Crossing Rate'); grid on; title("Crossing Rate por Frame"); drawnow;
-figure(4); plot(f0, 'color', dark_green); xlabel("Frame"); ylabel('Frequency'); grid on; title("Fundamental frequency (f0)"); drawnow;
+% Energy plot
+figure(2); plot(aux, 10*log(energy),'color', dark_green); xlabel("Tempo (s)"); ylabel('Energia (dB)'); grid on; title("Energia por Frame"); xlim([0 21]); drawnow;
+
+% Zero crossing plot
+figure(3); plot(aux, zeroCrossingRate, 'x', 'color', dark_green); xlabel("Tempo (s)"); ylabel('Taxa de passagem'); grid on; title("Taxa de passagem por zero em cada janela"); xlim([0 21]); drawnow;
+zeroCrossingRate_filtered = medfilt1(zeroCrossingRate, 5);
+figure(4); plot(aux, zeroCrossingRate_filtered, '.', 'color', dark_blue); xlabel("Tempo (s)"); ylabel('Taxa de passagem'); grid on; title("Taxa de passagem por zero em cada janela"); xlim([0 21]); drawnow;
+
+
+% Fundamental Freq. Plot
+figure(5); plot(aux, f0, 'x', 'color', dark_blue); xlabel("Frame"); ylabel('Frequency'); grid on; title("Fundamental frequency (f0)"); xlim([0 21]); drawnow;
+f0_filterd = medfilt1(zeroCrossingRate, 5);
+figure(6); plot(aux, f0_filterd, '.', 'color', dark_blue); xlabel("Frame"); ylabel('Frequency'); grid on; title("Fundamental frequency (f0)"); xlim([0 21]); drawnow;
+
+
 
 
 binEdges = 50:10:400;
-histogram(f0, binEdges, 'FaceColor', dark_blue); xlabel('Frequênciac Fundamental'); ylabel('Occorência em Frames'); title('Ocurrência de valores de F0');
-histogram(f0_pitch, binEdges, 'FaceColor', dark_blue); xlabel('Frequênciac Fundamental'); ylabel('Occorência em Frames'); title('Ocurrência de valores de F0');
-
+figure(7); histogram(f0, binEdges, 'FaceColor', dark_blue); xlabel('Frequênciac Fundamental'); ylabel('Occorência em Frames'); title('Ocurrência de valores de F0');
+% histogram(f0_pitch, binEdges, 'FaceColor', dark_blue); xlabel('Frequênciac Fundamental'); ylabel('Occorência em Frames'); title('Ocurrência de valores de F0');
 
 fprintf("End of the program.\n")
 
 
-
+function filteredVector = filterVector(vector, window, th)
+    windowSize = window;  
+    filteredVector = medfilt1(vector, windowSize);
+    absDiff = abs(vector - filteredVector);
+    threshold = th;  % Adjust as needed
+    
+    %filteredVector(absDiff > threshold) = 0;  
+end
 
 
 % Define a function to calculate F0 using autocorrelation
 function [f0, number_frame] = calculateF0Autocorrelation(frame, fs, number_frame)
     autocorr = xcorr(frame);
-    fprintf("\nFra,e: %d\n\nLength frame: %d\nLength corr: %d\n",number_frame, length(frame), length(autocorr));
     
     dark_blue = 1/255 * [3,37,126];
 
@@ -106,13 +125,15 @@ function [f0, number_frame] = calculateF0Autocorrelation(frame, fs, number_frame
     [~, maxIdx] = max(autocorr2);
     % Calculate F0 using the index
     f0 = fs / (maxIdx + floor(fs/fo_max));
-    fprintf("Frequencia fundamental [%d]: %f\n", maxIdx, f0);
     number_frame = number_frame + 1;
     if(number_frame==1281)
         figure(10); 
         subplot(1,2,1); plot(autocorr, 'color', dark_blue); xlabel("Indice"); ylabel("Magnitude"); title("Corr. frame 1281");
         subplot(1,2,2); plot((length(frame) + floor(fs/fo_max) : length(autocorr)) ,autocorr(length(frame) + floor(fs/fo_max) : length(autocorr)), 'color', dark_blue); xlabel("Indice"); ylabel("Magnitude"); title("Corr. frame 1281 cortada");
     end
+
+
+
 end
 
 

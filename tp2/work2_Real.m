@@ -69,29 +69,25 @@ for i = 1:numFrames
 end
 fprintf("DEBUG: numero de frames: %d | tamanho energia: %d\n", numFrames, length(energy))
 aux = (1:length(energy)) .* framestep;
+
+% Energy plot
 figure(2); plot(aux, 10*log(energy),'color', dark_green); xlabel("Tempo (s)"); ylabel('Energia (dB)'); grid on; title("Energia por Frame"); xlim([0 21]); drawnow;
-figure(3); plot(aux, zeroCrossingRate, 'x', 'color', dark_green); xlabel("Tempo (s)"); ylabel('Taxa de passagem'); grid on; title("Taxa de passagem por zero em cada janela"); xlim([0 21]); drawnow;
-figure(4); plot(aux, f0, 'x', 'color', dark_blue); xlabel("Frame"); ylabel('Frequency'); grid on; title("Fundamental frequency (f0)"); xlim([0 21]); drawnow;
+
+% Zero crossing plot
+figure(3); plot(aux, zeroCrossingRate, '.', 'color', dark_green); xlabel("Tempo (s)"); ylabel('Taxa de passagem'); grid on; title("Taxa de passagem por zero em cada janela"); xlim([0 21]); drawnow;
+zeroCrossingRate_filtered = medfilt1(zeroCrossingRate, 5);
+figure(4); plot(aux, zeroCrossingRate_filtered, '.', 'color', dark_blue); xlabel("Tempo (s)"); ylabel('Taxa de passagem'); grid on; title("Taxa de passagem por zero em cada janela após filtro mediana"); xlim([0 21]); drawnow;
 
 
-
+% Fundamental Freq. Plot
+figure(5); plot(aux, f0, '.', 'color', dark_green); xlabel("Frame"); ylabel('Frequency'); grid on; title("Frequência Fundamental por janela"); xlim([0 21]); drawnow;
+f0_filterd = medfilt1(f0, 20);
+figure(6); plot(aux, f0_filterd, '.', 'color', dark_blue); xlabel("Frame"); ylabel('Frequency'); grid on; title("Frequência Fundamental por janela após filtro mediana"); xlim([0 21]); drawnow;
 
 binEdges = 50:10:400;
-figure(5); histogram(f0, binEdges, 'FaceColor', dark_blue); xlabel('Frequênciac Fundamental'); ylabel('Occorência em Frames'); title('Ocurrência de valores de F0');
-% histogram(f0_pitch, binEdges, 'FaceColor', dark_blue); xlabel('Frequênciac Fundamental'); ylabel('Occorência em Frames'); title('Ocurrência de valores de F0');
-f0_filterd = filterVector(f0, 50, 5);
-figure(6); plot(aux, f0_filterd, '.', 'color', dark_blue); xlabel("Frame"); ylabel('Frequency'); grid on; title("Fundamental frequency (f0)"); xlim([0 21]); drawnow;
+figure(7); histogram(f0, binEdges, 'FaceColor', dark_blue); xlabel('Frequênciac Fundamental'); ylabel('Occorência em Frames'); title('Ocurrência de valores de F0');
 
 fprintf("End of the program.\n")
-
-
-function filteredVector = filterVector(vector, window, th)
-    windowSize = window;  
-    filteredVector = medfilt1(vector, windowSize);
-    absDiff = abs(vector - filteredVector);
-    threshold = th;  % Adjust as needed
-    filteredVector(absDiff > threshold) = 0;  
-end
 
 
 % Define a function to calculate F0 using autocorrelation
