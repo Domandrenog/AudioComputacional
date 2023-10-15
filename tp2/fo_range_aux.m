@@ -22,3 +22,5 @@ subplot(2,1,2); plot(y_corr, 'color', dark_green, 'LineWidth', 1.2); xlabel("Fre
 
 xline(f_max,'--r','1 / f_0max', 'color', dark_red, 'LineWidth', 1.5);
 xline(f_min,'--r','1 / f_0min', 'color', dark_red, 'LineWidth', 1.5);
+
+
