@@ -41,10 +41,14 @@ numFrames = floor((length(y) - overlap) / (frameSize - overlap)); %Know number o
 energy = zeros(numFrames, 1); %put everything at zero
 zeroCrossingRate = zeros(numFrames, 1); %put everything at zero
 f0 = zeros(numFrames, 1); %put everything at zero
+<<<<<<< HEAD:tp2/work2_Real_v2.m
+
+=======
 f0_pitch = zeros(numFrames, 1); %put everything at zero
 
 %frame = zeros(numFrames, 1); %put everything at zero
 number_frame = 0;
+>>>>>>> addd55fae1096c9a07cb1c4c8c539826c2ea6cea:tp2/work2_Real.asv
 % Perform sliding analysis
 for i = 1:numFrames
     startIdx = floor((i - 1) * (frameSize - overlap) + 1); %Define where the variable starts to save, so needs to be in this case 10 in 10, so the first index is 1 then 11,21,31
@@ -67,6 +71,12 @@ for i = 1:numFrames
     % f0_pitch(i) = pitch(frame,newFs);
     
 end
+<<<<<<< HEAD:tp2/work2_Real_v2.m
+
+figure(2); plot(10*log(energy),'color', dark_green); xlabel("Frame"); ylabel('Energia (dB)'); grid on; title("Energia por Frame"); drawnow;
+figure(3); plot(zeroCrossingRate, 'color', dark_green); xlabel("Frame"); ylabel('Crossing Rate'); grid on; title("Crossing Rate por Frame"); drawnow;
+figure(4); plot(f0, 'color', dark_green); xlabel("Frame"); ylabel('Frequency'); grid on; title("Fundamental frequency (f0)"); drawnow;
+=======
 aux = (1:length(energy)) .* framestep;
 
 % Energy plot
@@ -88,13 +98,30 @@ fprintf("\nValor médio f0: %.2f\n", mean(f0( (f0<150) & (f0>70))));
 
 binEdges = 50:10:400;
 figure(7); histogram(f0, binEdges, 'FaceColor', dark_blue); xlabel('Frequência Fundamental'); ylabel('Occorência em Janelas'); title('Ocurrência de valores de F0');
+>>>>>>> addd55fae1096c9a07cb1c4c8c539826c2ea6cea:tp2/work2_Real.asv
 
 fprintf("End of the program.\n")
 
 
 % Define a function to calculate F0 using autocorrelation
+<<<<<<< HEAD:tp2/work2_Real_v2.m
+function f0 = calculateF0Autocorrelation(frame, fs)
+% We need to search the second peak, because the first peak is always 0 
+% The voice of man is between 70 and 250 Hz, so we need to find the peak in this interval
+
+   fo_min = 70; %Hz
+   fo_max = 1000; %Hz
+
+
+    % Calculate autocorrelation
+    autocorr = xcorr(frame);
+
+    %Cut the negative length and only focus in the voice specter
+    autocorr1 = autocorr((length(frame) + floor((1/fo_max)*fs)):(length(frame) + floor((1/fo_min)*fs)));
+=======
 function [f0, number_frame] = calculateF0Autocorrelation(frame, fs, number_frame)
     autocorr = xcorr(frame);
+>>>>>>> addd55fae1096c9a07cb1c4c8c539826c2ea6cea:tp2/work2_Real.asv
     
     dark_blue = 1/255 * [3,37,126];
     dark_green = 1/255 * [0,100,0];
@@ -111,6 +138,16 @@ function [f0, number_frame] = calculateF0Autocorrelation(frame, fs, number_frame
 
 
     % Find the index of the maximum peak in the autocorrelation function
+<<<<<<< HEAD:tp2/work2_Real_v2.m
+    [~, maxIdx] = max(autocorr1);
+ 
+    % Calculate F0 using the index
+    f0 = fs / (maxIdx + floor((1/fo_max)*fs)); %Somar estes pois foram cortados do index, logo ainda são necessarios para ter o index correto
+    
+    %if f0 > 245 || f0 < 71
+        %f0 = 150;
+    %end
+=======
     [~, maxIdx] = max(autocorr2);
     % Calculate F0 using the index
     f0 = fs / (maxIdx + floor(fs/fo_max));
@@ -122,6 +159,7 @@ function [f0, number_frame] = calculateF0Autocorrelation(frame, fs, number_frame
     end
 
 
+>>>>>>> addd55fae1096c9a07cb1c4c8c539826c2ea6cea:tp2/work2_Real.asv
 
 end
 
