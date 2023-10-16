@@ -43,6 +43,7 @@ f0 = zeros(numFrames, 1); %put everything at zero
 f0_pitch = zeros(numFrames, 1); %put everything at zero
 %frame = zeros(numFrames, 1); %put everything at zero
 number_frame = 0;
+
 % Perform sliding analysis
 for i = 1:numFrames
     startIdx = floor((i - 1) * (frameSize - overlap) + 1); %Define where the variable starts to save, so needs to be in this case 10 in 10, so the first index is 1 then 11,21,31
@@ -62,7 +63,8 @@ for i = 1:numFrames
 
     % Calculate fundamental frequency using autocorrelation
     [f0(i), number_frame] = calculateF0Autocorrelation(frame, newFs, number_frame);
-    % f0_pitch(i) = pitch(frame,newFs);
+    
+    %f0_pitch(i) = pitch(frame,newFs);
     
 end
 aux = (1:length(energy)) .* framestep;
