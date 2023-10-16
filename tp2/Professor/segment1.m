@@ -59,6 +59,7 @@ for i=3:length(decisao)
     end
 end
 figure;plot((1:length(sinal)),sinal/max(sinal)*4,'y',100*(1:length(decisao)),decisao, '.');
+title('Classificação: 0 - Indefinido, 1 - Silêncio, 3 - Ruido e 4 - Voz');
 binEdges = 0:0.5:5;
 % Crie alguns dados de exemplo
 x = 0.3:1:4.3;
@@ -76,20 +77,28 @@ title('Número de ocorrências de Indefinido, Silêncio, Ruido e Voz');
 % Decisao= 0->Não dedinido; 1-> silencio; 2-> excitado por ruido (noise);
 % 2,5-> Excitação noise/mista 3-> mista; 4-> vocalizado
 
-% for i=1:length(decisao)
-%   if (s(i)>=12 && (car(i,1)>8 || car(i,2)>8)), decisao(i)=1; end
-%   if (car(i,1)<=8 && car(i,2)<=3), decisao(i)=4; end
-%   if (car(i,1)<3 && car(i,2)>3), decisao(i)=2; end
-%   if (car(i,1)<=6 && car(i,1)>=3 && car(i,2)>3 && car(i,2)<=8), decisao(i)=3; end
-%   if (car(i,1)<3 && car(i,2)>3 && car(i,2)<=8), decisao(i)=2.5; end
-% end
-% for i=3:length(decisao) 
-%     if decisao(i-2)==decisao(i) 
-%         decisao(i-1)=decisao(i); 
-%     end
-% end
-% figure;plot((1:length(sinal)),sinal/max(sinal)*4,'y',100*(1:length(decisao)),decisao,'r');
-% title('Classificação: 0-indef. 1-Sil 2-Noise 2.5-Comum; 3-Mix 4-Voiced');
+for i=1:length(decisao)
+   if (s(i)>=12 && (car(i,1)>8 || car(i,2)>8)), decisao(i)=1; end
+   if (car(i,1)<=8 && car(i,2)<=3), decisao(i)=4; end
+   if (car(i,1)<3 && car(i,2)>3), decisao(i)=2; end
+   if (car(i,1)<=6 && car(i,1)>=3 && car(i,2)>3 && car(i,2)<=8), decisao(i)=3; end
+   if (car(i,1)<3 && car(i,2)>3 && car(i,2)<=8), decisao(i)=2.5; end
+end
+for i=3:length(decisao) 
+     if decisao(i-2)==decisao(i) 
+         decisao(i-1)=decisao(i); 
+     end
+end
+figure;plot((1:length(sinal)),sinal/max(sinal)*4,'y',100*(1:length(decisao)),decisao,'.');
+title('Classificação: 0-Indef. 1-Silê. 2-Ruído 2.5-Comum; 3-Mix 4-Voz');
+
+binEdges = 0:0.5:5;
+% Crie alguns dados de exemplo
+x = 0.3:1:4.3;
+% Defina os rótulos personalizados para o eixo x
+novo_rotulo_x = {'Indefinido', 'Silêncio', 'Ruido', 'Mix', 'Voz'};
+figure(8); histogram(decisao, binEdges, 'FaceColor', dark_blue); ylabel('Total de ocorrências'); xticks(x); xticklabels(novo_rotulo_x);
+title('Número de ocorrências de Indefinido, Silêncio, Ruido, Comum, Mix e Voz');
 
 % figure;plot(zero);title('zeros');
 % figure;plot(energia);title('energia');
