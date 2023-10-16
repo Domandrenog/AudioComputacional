@@ -40,11 +40,7 @@ numFrames = floor((length(y) - overlap) / (frameSize - overlap)); %Know number o
 energy = zeros(numFrames, 1); %put everything at zero
 zeroCrossingRate = zeros(numFrames, 1); %put everything at zero
 f0 = zeros(numFrames, 1); %put everything at zero
-<<<<<<< HEAD
-=======
 f0_pitch = zeros(numFrames, 1); %put everything at zero
->>>>>>> addd55fae1096c9a07cb1c4c8c539826c2ea6cea
-
 %frame = zeros(numFrames, 1); %put everything at zero
 number_frame = 0;
 % Perform sliding analysis
@@ -93,10 +89,7 @@ figure(7); histogram(f0, binEdges, 'FaceColor', dark_blue); xlabel('Frequência 
 
 fprintf("End of the program.\n")
 
-<<<<<<< HEAD
-=======
 
->>>>>>> addd55fae1096c9a07cb1c4c8c539826c2ea6cea
 % Define a function to calculate F0 using autocorrelation
 function [f0, number_frame] = calculateF0Autocorrelation(frame, fs, number_frame)
     autocorr = xcorr(frame);
@@ -118,13 +111,7 @@ function [f0, number_frame] = calculateF0Autocorrelation(frame, fs, number_frame
     % Find the index of the maximum peak in the autocorrelation function
     [~, maxIdx] = max(autocorr2);
     % Calculate F0 using the index
-<<<<<<< HEAD
-    f0 = fs / (maxIdx + floor((1/fo_max)*fs)); %Somar estes pois foram cortados do index, logo ainda são necessarios para ter o index correto
-    
-    %if f0 > 245 || f0 < 71
-        f0 = 150;
-    %end
-=======
+
     f0 = fs / (maxIdx + floor(fs/fo_max));
     number_frame = number_frame + 1;
     if(number_frame==1281)
@@ -133,8 +120,6 @@ function [f0, number_frame] = calculateF0Autocorrelation(frame, fs, number_frame
         subplot(2,1,2); plot((length(frame) + floor(fs/fo_max) : length(autocorr)) ,autocorr(length(frame) + floor(fs/fo_max) : length(autocorr)), 'color', dark_green, 'LineWidth', 1.5); xlabel("Indice"); ylabel("Magnitude"); title("Corr. frame 1281 cortada"); grid on;
     end
 
-
->>>>>>> addd55fae1096c9a07cb1c4c8c539826c2ea6cea
 
 end
 
