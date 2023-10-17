@@ -94,11 +94,12 @@ title('Classificação: 0-Indef. 1-Silê. 2-Ruído 2.5-Comum; 3-Mix 4-Voz');
 
 binEdges = 0:0.5:5;
 % Crie alguns dados de exemplo
-x = 0.3:1:4.3;
+x = [0.3, 1.3, 2.3, 2.81, 3.3, 4.3]; %0.3:1:4.3;
 % Defina os rótulos personalizados para o eixo x
-novo_rotulo_x = {'Indefinido', 'Silêncio', 'Ruido', 'Mix', 'Voz'};
+novo_rotulo_x = {'Indefinido', 'Silêncio', 'Ruido', 'Normal', 'Mix', 'Voz'};
 figure(8); histogram(decisao, binEdges, 'FaceColor', dark_blue); ylabel('Total de ocorrências'); xticks(x); xticklabels(novo_rotulo_x);
 title('Número de ocorrências de Indefinido, Silêncio, Ruido, Comum, Mix e Voz');
+
 
 % figure;plot(zero);title('zeros');
 % figure;plot(energia);title('energia');
