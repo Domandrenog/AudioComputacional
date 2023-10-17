@@ -72,8 +72,6 @@ figure;
 plot(t, sinal / max(sinal) * 4, 'y', 100 * (1:length(decisao)) / Fa, decisao, '.'); xlim([0, 21]);
 title('Classificação: 0 - Indefinido, 1 - Silêncio, 3 - Ruido e 4 - Voz');
 
-
-
 figure; plot(t, sinal/max(sinal)*4, 'y', 100*(1:length(decisao)) / Fa, decisao, '.'); xlim([15, 16]);
 title('Classificação: 0 - Indefinido, 1 - Silêncio, 3 - Ruido e 4 - Voz');
 
