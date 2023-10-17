@@ -11,8 +11,8 @@ darl_purple = 1/255 * [153, 51, 153];
 
 % Load the audio file
 fprintf("Start of the Program.\n")
-%inputFileName = 'ASRF24.wav';
-inputFileName = 'teste_vozeado.wav';
+inputFileName = 'ASRF24.wav';
+%inputFileName = 'teste_vozeado.wav';
 [x, fs] = audioread(inputFileName); %fs = 44100Hz, we need 16000Hz
 fprintf("Length of the audio: %d\n", length(x));
 fprintf("Duration of the audio: %.2f\n", length(x)/fs);
@@ -48,14 +48,16 @@ speech = zeros(numFrames, 1); %put everything at zero
 non_speech = zeros(numFrames, 1); %put everything at zero
 vozeada = zeros(numFrames, 1); %put everything at zero
 nao_vozeada = zeros(numFrames, 1); %put everything at zero
+mix_vozeada = zeros(numFrames, 1); %put everything at zero
 
 %frame = zeros(numFrames, 1); %put everything at zero
 
 % Speech detection
 energy_treshold = 0.3;
-tp0_treshold = 0.05;
+tp0_treshold = 0.15;
+mix_treshold = 0.1;
 
-debug = zeros(4, 1); % apagar
+count = zeros(5, 1); % apagar
 number_frame = 0;
 
 % Perform sliding analysis
@@ -84,19 +86,28 @@ for i = 1:numFrames
         speech(i) = NaN;
         vozeada(i) = NaN;
         nao_vozeada(i) = NaN;
-        debug(1) = debug(1) + 1;
+        mix_vozeada(i) = NaN;
+        count(1) = count(1) + 1;
     
     else % Case de haver fala
         speech(i) = 1;
         non_speech(i) = NaN;
-        if zeroCrossingRate(i) < tp0_treshold % Vozeada
+        count(5) = count(5) +1;
+        if (zeroCrossingRate(i) < mix_treshold)% Vozeada
             nao_vozeada(i) = NaN;
+            mix_vozeada(i) = NaN;
             vozeada(i) = 0.9;
-            debug(2) = debug(2) + 1;
-        else
-            nao_vozeada(i) = 0.8;
+            count(2) = count(2) + 1;
+        elseif (zeroCrossingRate(i) > mix_treshold) && (zeroCrossingRate(i) < tp0_treshold)
+            mix_vozeada(i) = 0.8;
+            nao_vozeada(i) = NaN;
             vozeada(i) = NaN;
-            debug(3) = debug(3) + 1;
+            count(3) = count(3) + 1;
+        else
+            nao_vozeada(i) = 0.7;
+            vozeada(i) = NaN;
+            mix_vozeada(i) = NaN;
+            count(4) = count(4) + 1;
         end
     end
 end
@@ -127,7 +138,7 @@ binEdges = 50:10:400;
 figure(7); histogram(f0, binEdges, 'FaceColor', dark_blue); xlabel('Frequência Fundamental'); ylabel('Occorência em Janelas'); title('Ocurrência de valores de F0');
 
 
-fprintf("\nDEBUG\nvozeada: %d | Não vozeada: %d | Speech: %d | Non Speech %d", debug(2), debug(3), debug(2) + debug(3), debug(1));
+% fprintf("\nDEBUG\nvozeada: %d | Não vozeada: %d | Speech: %d | Non Speech %d | mix: %d", debug(2), debug(3), debug(2) + debug(3), debug(1), debug(4));
 
 figure(7); 
 plot(t_y, y, 'color', dark_blue); xlabel("Tempo (s)"); ylabel('Amplitude'); grid on; xlim([0 21]);
@@ -138,9 +149,33 @@ plot(aux, non_speech, '.', 'color', 'r'); xlabel("Tempo (s)"); ylabel('Presença
 hold on;
 plot(aux, vozeada, '.', 'color', dark_orange); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala");
 hold on;
-plot(aux, nao_vozeada, '.', 'color', darl_purple); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); xlim([0 21]); ylim([-1 1.1]);
-hold off;
+plot(aux, nao_vozeada, '.', 'color', darl_purple); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); xlim([7 9]); ylim([-1 1.1]);
+hold on;
+plot(aux, mix_vozeada, '.', 'color', 'r'); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); xlim([7 9]); ylim([-1 1.1]);
+
+legend('Sinal', 'Presença de voz', 'vozeada', 'não vozeada', 'mix',  'Location', 'SouthEast');
 drawnow;
+
+
+
+categories = {'voz total', 'vozeado', 'mix', 'não vozeado', 'silencio'};
+values = [count(5), count(1), count(2), count(3), count(4)];
+
+% Create a bar graph
+bar(categories, values);
+
+% Add labels and title
+xlabel('Categories');
+ylabel('Ocurrências');
+title('Presenças de tipos de voz e silêncio');
+
+% You can also customize the appearance of the bars as needed.
+
+
+
+
+
+
 
 
 fprintf("End of the program.\n")

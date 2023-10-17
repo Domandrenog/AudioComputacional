@@ -9,8 +9,11 @@ clear all
 close all
 
 %color for plots
-dark_green = 1/255 * [0, 100, 0];
-dark_blue = 1/255 * [3, 37, 126];
+%color for plots
+dark_green = 1/255 * [0,100,0];
+dark_blue = 1/255 * [3,37,126];
+dark_orange = 1/255 * [255, 165, 0];
+darl_purple = 1/255 * [153, 51, 153];
 
 % Load the audio file
 fprintf("Start of the Program.\n")
@@ -69,10 +72,17 @@ for i = 3:length(decisao)
 end
 
 figure;
-plot(t_y, y / max(y) * 4, 'y', 100 * (1:length(decisao)) / newFs, decisao, '.'); xlim([0, 21]); xlabel("Tempo (s)"); ylabel("Amplitude");
-title('Classificação: 0 - Indefinido, 1 - Silêncio, 3 - Ruido e 4 - Voz');
+plot(t_y, y / max(y) * 4, 'color', dark_blue);
+hold on;
+plot((1:length(decisao)) * 100 / newFs, decisao, '.', 'color', dark_orange);
+xlim([0, 21]);
+xlabel("Tempo (s)");
+ylabel("Amplitude");
+title('Classificação: 0 - Indefinido, 1 - Silêncio, 3 - Ruído e 4 - Voz');
 
-figure; plot(t_y, y/max(y)*4, 'y', 100*(1:length(decisao)) / newFs, decisao, '.'); xlim([7, 9]); xlabel("Tempo (s)"); ylabel("Amplitude");
+figure; plot(t_y, y/max(y)*4, 'color', dark_blue)
+hold on;
+plot(100*(1:length(decisao)) / newFs, decisao, '.', 'color', dark_orange); xlim([7, 9]); xlabel("Tempo (s)"); ylabel("Amplitude");
 title('Classificação: 0 - Indefinido, 1 - Silêncio, 3 - Ruido e 4 - Voz');
 
 binEdges = 0:0.5:5; x = 0.3:1:4.3; novo_rotulo_x = {'Indefinido', 'Silêncio', '', 'Ruido', 'Voz'}; % Rotulos
@@ -98,10 +108,14 @@ for i=3:length(decisao)
          decisao(i-1)=decisao(i); 
      end
 end
-figure;plot(t_y,y/max(y)*4,'y',100*(1:length(decisao)) / newFs,decisao,'.'); xlim([0, 21]); xlabel("Tempo (s)"); ylabel("Amplitude");
+figure;plot(t_y,y/max(y)*4,'color', dark_blue)
+hold on;
+plot(100*(1:length(decisao)) / newFs,decisao,'.', 'color', dark_orange); xlim([0, 21]); xlabel("Tempo (s)"); ylabel("Amplitude");
 title('Classificação: 0-Indef. 1-Silê. 2-Ruído 2.5-N. Voze. 3-Mix 4-Voze.');
 
-figure; plot(t_y, y/max(y)*4, 'y', 100*(1:length(decisao)) / newFs, decisao, '.');xlim([7, 9]); xlabel("Tempo (s)"); ylabel("Amplitude");
+figure; plot(t_y, y/max(y)*4, 'color', dark_blue);
+hold on;
+plot(100*(1:length(decisao)) / newFs, decisao, '.', 'color', dark_orange);xlim([7, 9]); xlabel("Tempo (s)"); ylabel("Amplitude");
 title('Classificação: 0-Indef. 1-Silê. 2-Ruído 2.5-N. Voze. 3-Mix 4-Voze.');
 
 binEdges = 0:0.5:5; x = [0.3, 1.3, 2.3, 2.81, 3.3, 4.3]; novo_rotulo_x = {'Indefinido', 'Silêncio', 'Rui.', 'N. V.', 'Mix', 'Vozeado'};

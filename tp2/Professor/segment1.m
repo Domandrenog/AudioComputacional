@@ -6,7 +6,7 @@
 % Paramétrica de Sinais Para Sistemas TTS. Editorial Académica Española
 % ISBN: 978-3-659-06206-3, 2013. pág. 96 e 209.
 clear all
-close all
+
 
 
 %color for plots
