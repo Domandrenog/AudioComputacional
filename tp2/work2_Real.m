@@ -11,7 +11,8 @@ darl_purple = 1/255 * [153, 51, 153];
 
 % Load the audio file
 fprintf("Start of the Program.\n")
-inputFileName = 'ASRF24.wav';
+%inputFileName = 'ASRF24.wav';
+inputFileName = 'teste_vozeado.wav';
 [x, fs] = audioread(inputFileName); %fs = 44100Hz, we need 16000Hz
 fprintf("Length of the audio: %d\n", length(x));
 fprintf("Duration of the audio: %.2f\n", length(x)/fs);
