@@ -8,7 +8,6 @@ dark_blue = 1/255 * [3,37,126];
 dark_orange = 1/255 * [255, 165, 0];
 darl_purple = 1/255 * [153, 51, 153];
 
-
 % Load the audio file
 fprintf("Start of the Program.\n")
 inputFileName = 'ASRF24.wav';
@@ -151,25 +150,22 @@ plot(aux, vozeada, '.', 'color', dark_orange); xlabel("Tempo (s)"); ylabel('Pres
 hold on;
 plot(aux, nao_vozeada, '.', 'color', darl_purple); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); 
 hold on;
-plot(aux, mix_vozeada, '.', 'color', 'r'); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); xlim([7 9]); ylim([-1 1.1]); %%%%%%%% ALterar intervalo %%%%%% mudar em xlim[ i f];
+plot(aux, mix_vozeada, '.', 'color', 'r'); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); xlim([7 9]); ylim([-1 1.1]);
 
 legend('Sinal', 'Presença de voz', 'vozeada', 'não vozeada', 'mix',  'Location', 'SouthEast');
 drawnow;
 
 
 
-categories = {'voz total', 'vozeado', 'mix', 'não vozeado', 'silencio'};
-values = [count(5), count(1), count(2), count(3), count(4)];
+categories = ['voz total' 'vozeado' 'mix' 'não vozeado' 'silencio'];
+values = [count(5) count(1) count(2) count(3) count(4)];
+figure(8);
+bar(values, categories);
 
-% Create a bar graph
-bar(categories, values);
 
-% Add labels and title
-xlabel('Categories');
-ylabel('Ocurrências');
-title('Presenças de tipos de voz e silêncio');
 
-% You can also customize the appearance of the bars as needed.
+
+
 
 
 
