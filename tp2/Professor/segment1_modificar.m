@@ -109,7 +109,4 @@ figure(8); histogram(decisao, binEdges, 'FaceColor', dark_blue); ylabel('Total d
 title('Número de ocorrências de Indefinido, Silêncio, Ruido, Comum, Mix e Voz');
 
 
-% figure;plot(zero);title('zeros');
-% figure;plot(energia);title('energia');
-% figure;plot((1:length(y)),sinal/max(y)*4,'y',100*(1:length(decisao)),decisao,'r',100*(1:length(decisao)),car(:,1)/2.5,'g',100*(1:length(decisao)),car(:,2)/2.5,'b');
 
