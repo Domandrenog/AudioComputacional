@@ -69,10 +69,10 @@ for i = 3:length(decisao)
 end
 
 figure;
-plot(t_y, y / max(y) * 4, 'y', 100 * (1:length(decisao)) / newFs, decisao, '.'); xlim([0, 21]);
+plot(t_y, y / max(y) * 4, 'y', 100 * (1:length(decisao)) / newFs, decisao, '.'); xlim([0, 21]); xlabel("Tempo (s)"); ylabel("Amplitude");
 title('Classificação: 0 - Indefinido, 1 - Silêncio, 3 - Ruido e 4 - Voz');
 
-figure; plot(t_y, y/max(y)*4, 'y', 100*(1:length(decisao)) / newFs, decisao, '.'); xlim([15, 16]);
+figure; plot(t_y, y/max(y)*4, 'y', 100*(1:length(decisao)) / newFs, decisao, '.'); xlim([15, 16]); xlabel("Tempo (s)"); ylabel("Amplitude");
 title('Classificação: 0 - Indefinido, 1 - Silêncio, 3 - Ruido e 4 - Voz');
 
 binEdges = 0:0.5:5; x = 0.3:1:4.3; novo_rotulo_x = {'Indefinido', 'Silêncio', '', 'Ruido', 'Voz'}; % Rotulos
@@ -98,10 +98,10 @@ for i=3:length(decisao)
          decisao(i-1)=decisao(i); 
      end
 end
-figure;plot(t_y,y/max(y)*4,'y',100*(1:length(decisao)) / newFs,decisao,'.'); xlim([0, 21]);
+figure;plot(t_y,y/max(y)*4,'y',100*(1:length(decisao)) / newFs,decisao,'.'); xlim([0, 21]); xlabel("Tempo (s)"); ylabel("Amplitude");
 title('Classificação: 0-Indef. 1-Silê. 2-Ruído 2.5-Comum; 3-Mix 4-Voz');
 
-figure; plot(t_y, y/max(y)*4, 'y', 100*(1:length(decisao)) / newFs, decisao, '.');xlim([15, 16]);
+figure; plot(t_y, y/max(y)*4, 'y', 100*(1:length(decisao)) / newFs, decisao, '.');xlim([15, 16]); xlabel("Tempo (s)"); ylabel("Amplitude");
 title('Classificação: 0-Indef. 1-Silê. 2-Ruído 2.5-Comum; 3-Mix 4-Voz');
 
 binEdges = 0:0.5:5; x = [0.3, 1.3, 2.3, 2.81, 3.3, 4.3]; novo_rotulo_x = {'Indefinido', 'Silêncio', 'Ruido', 'Normal', 'Mix', 'Voz'};
