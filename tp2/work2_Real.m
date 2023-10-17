@@ -149,9 +149,9 @@ plot(aux, non_speech, '.', 'color', 'r'); xlabel("Tempo (s)"); ylabel('Presença
 hold on;
 plot(aux, vozeada, '.', 'color', dark_orange); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala");
 hold on;
-plot(aux, nao_vozeada, '.', 'color', darl_purple); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); xlim([7 9]); ylim([-1 1.1]);
+plot(aux, nao_vozeada, '.', 'color', darl_purple); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); 
 hold on;
-plot(aux, mix_vozeada, '.', 'color', 'r'); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); xlim([7 9]); ylim([-1 1.1]);
+plot(aux, mix_vozeada, '.', 'color', 'r'); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); xlim([7 9]); ylim([-1 1.1]); %%%%%%%% ALterar intervalo %%%%%% mudar em xlim[ i f];
 
 legend('Sinal', 'Presença de voz', 'vozeada', 'não vozeada', 'mix',  'Location', 'SouthEast');
 drawnow;
