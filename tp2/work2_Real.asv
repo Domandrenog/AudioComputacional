@@ -54,7 +54,7 @@ nao_vozeada = zeros(numFrames, 1); %put everything at zero
 energy_treshold = 0.3;
 tp0_treshold = 0.05;
 
-debug = zeros(4, 1); % apagar
+
 number_frame = 0;
 
 % Perform sliding analysis
@@ -83,23 +83,19 @@ for i = 1:numFrames
         speech(i) = NaN;
         vozeada(i) = NaN;
         nao_vozeada(i) = NaN;
-        debug(1) = debug(1) + 1;
     
     else % Case de haver fala
         speech(i) = 1;
         non_speech(i) = NaN;
-        if zeroCrossingRate(i) < tp0_treshold % Vozeada
-            nao_vozeada(i) = NaN;
+        if f0(i) < tp0_treshold % Vozeada
+            nao_vozeada(i) = 0;
             vozeada(i) = 0.9;
-            debug(2) = debug(2) + 1;
         else
             nao_vozeada(i) = 0.8;
-            vozeada(i) = NaN;
-            debug(3) = debug(3) + 1;
+            vozeada(i) = -2;
         end
     end
 end
-
 aux = (1:length(energy)) .* framestep;
 
 % Energy plot
@@ -126,7 +122,7 @@ binEdges = 50:10:400;
 figure(7); histogram(f0, binEdges, 'FaceColor', dark_blue); xlabel('Frequência Fundamental'); ylabel('Occorência em Janelas'); title('Ocurrência de valores de F0');
 
 
-fprintf("\nDEBUG\nvozeada: %d | Não vozeada: %d | Speech: %d | Non Speech %d", debug(2), debug(3), debug(2) + debug(3), debug(1));
+fprintf("DEBUG\nvozeada: %d |Não vozeada: %d | Speech: %d | Non Speech %d", sum(vozeada)/0.9, sum(nao_vozeada)/0.8, length(speech), length(non_speech));
 
 figure(7); 
 plot(t_y, y, 'color', dark_blue); xlabel("Tempo (s)"); ylabel('Amplitude'); grid on; xlim([0 21]);
