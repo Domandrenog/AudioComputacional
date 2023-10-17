@@ -64,25 +64,25 @@ end
 
 m = fmedia(energy, 5, 1);
 energia = fmedia(m, 3, 1); % Alisamento
-LSES = max(energia(1:100));
+LSES = max(energy(1:100));
 
 
 der = fderivad(y);
 zero = fzeros2(der, 50, espacamento); % Taxa de passagem por zero da derivada
 m = fmedia(zero, 5, 1);
 zero = fmedia(m, 3, 1); % Alisamento
-LIZ = min(zero(3:70)); % Limite Inferior da Taxa de Passagem por Zero
+LIZ = min(zeroCrossingRate(3:70)); % Limite Inferior da Taxa de Passagem por Zero
 
 car = zeros(round(length(y) / (espacamento * 10)), 2);
 s = zeros(round(length(y) / (espacamento * 10)), 1);
 decisao = zeros(round(length(y) / (espacamento * 10)), 1);
 
-for i = 0:10:length(energia) - 10
+for i = 0:10:length(zeroCrossingRate) - 10 %needs to be zero
     z = 0;
     e = 0;
     for j = 1:10
-        if zero(i + j) > LIZ, z = z + 1; end
-        if energia(i + j) < LSES, e = e + 1; end
+        if zeroCrossingRate(i + j) > LIZ, z = z + 1; end
+        if energy(i + j) < LSES, e = e + 1; end
     end
     car(i / 10 + 1, 1) = e; % Energia
     car(i / 10 + 1, 2) = z; % Taxa de Passsagem por zero

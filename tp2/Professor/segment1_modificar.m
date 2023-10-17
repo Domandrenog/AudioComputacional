@@ -21,11 +21,11 @@ inputFileName = 'ASRF24.wav';
 newFs = 16000; % Target sampling rate
 y = resample(x, newFs, fs);
 
-espacamento = 10;
-
 % Calculate time in seconds
 t_y = (0:length(y) - 1) / newFs; % Time for the downsample signal
 
+
+espacamento = 10;
 energia = fenerg2(y, espacamento); % Energia do sinal
 m = fmedia(energia, 5, 1);
 energia = fmedia(m, 3, 1); % Alisamento
