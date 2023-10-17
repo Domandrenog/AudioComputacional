@@ -95,6 +95,7 @@ figure(7); histogram(f0, binEdges, 'FaceColor', dark_blue); xlabel('Frequência 
 
 
 
+
 fprintf("End of the program.\n")
 
 
