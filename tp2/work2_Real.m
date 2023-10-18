@@ -8,6 +8,10 @@ dark_blue = 1/255 * [3,37,126];
 dark_orange = 1/255 * [255, 165, 0];
 darl_purple = 1/255 * [153, 51, 153];
 
+
+
+
+
 % Load the audio file
 fprintf("Start of the Program.\n")
 inputFileName = 'ASRF24.wav';
@@ -52,7 +56,7 @@ mix_vozeada = zeros(numFrames, 1); %put everything at zero
 %frame = zeros(numFrames, 1); %put everything at zero
 
 % Speech detection
-energy_treshold = 0.3;
+energy_treshold = 0.05;
 tp0_treshold = 0.15;
 mix_treshold = 0.1;
 
@@ -137,7 +141,7 @@ binEdges = 50:10:400;
 figure(7); histogram(f0, binEdges, 'FaceColor', dark_blue); xlabel('Frequência Fundamental'); ylabel('Occorência em Janelas'); title('Ocurrência de valores de F0');
 
 
-% fprintf("\nDEBUG\nvozeada: %d | Não vozeada: %d | Speech: %d | Non Speech %d | mix: %d", debug(2), debug(3), debug(2) + debug(3), debug(1), debug(4));
+fprintf("\nDEBUG\nvozeada: %d | Não vozeada: %d | Speech: %d | Non Speech %d | mix: %d\n", count(2), count(3), count(2) + count(3), count(1), count(4));
 
 figure(7); 
 plot(t_y, y, 'color', dark_blue); xlabel("Tempo (s)"); ylabel('Amplitude'); grid on; xlim([0 21]);
@@ -150,25 +154,29 @@ plot(aux, vozeada, '.', 'color', dark_orange); xlabel("Tempo (s)"); ylabel('Pres
 hold on;
 plot(aux, nao_vozeada, '.', 'color', darl_purple); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); 
 hold on;
-plot(aux, mix_vozeada, '.', 'color', 'r'); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); xlim([7 9]); ylim([-1 1.1]);
+plot(aux, mix_vozeada, '.', 'color', 'r'); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); xlim([0 21]); ylim([-1 1.1]);
 
 legend('Sinal', 'Presença de voz', 'vozeada', 'não vozeada', 'mix',  'Location', 'SouthEast');
 drawnow;
 
 
 
+
+
+% Import data from praat
+fileID = fopen('pitch_praat.txt','r');
+formatSpec = '%f';
+data = fscanf(fileID,formatSpec);
+figure(8);
+plot(data((data>50) & (data<500)), '.'); ylim([0 700]);
+fprintf("Tamanho pitch: %d\n", length(data));
+
+
+% Não está a dar no meu 
 categories = ['voz total' 'vozeado' 'mix' 'não vozeado' 'silencio'];
 values = [count(5) count(1) count(2) count(3) count(4)];
 figure(8);
 bar(values, categories);
-
-
-
-
-
-
-
-
 
 
 
