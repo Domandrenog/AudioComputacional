@@ -115,7 +115,7 @@ title('Classificação: 0-Indef. 1-Silê. 2-Ruído 2.5-N. Voze. 3-Mix 4-Voze.');
 
 figure; plot(t_y, y/max(y)*4, 'color', dark_blue);
 hold on;
-plot(100*(1:length(decisao)) / newFs, decisao, '.', 'color', dark_orange);xlim([7, 9]); xlabel("Tempo (s)"); ylabel("Amplitude");
+plot(100*(1:length(decisao)) / newFs, decisao, '.', 'color', dark_orange);xlim([12, 14]); xlabel("Tempo (s)"); ylabel("Amplitude");
 title('Classificação: 0-Indef. 1-Silê. 2-Ruído 2.5-N. Voze. 3-Mix 4-Voze.');
 
 binEdges = 0:0.5:5; x = [0.3, 1.3, 2.3, 2.81, 3.3, 4.3]; novo_rotulo_x = {'Indefinido', 'Silêncio', 'Rui.', 'N. V.', 'Mix', 'Vozeado'};
