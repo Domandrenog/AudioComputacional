@@ -154,22 +154,13 @@ plot(aux, vozeada, '.', 'color', dark_orange); xlabel("Tempo (s)"); ylabel('Pres
 hold on;
 plot(aux, nao_vozeada, '.', 'color', darl_purple); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); 
 hold on;
-plot(aux, mix_vozeada, '.', 'color', 'r'); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); xlim([12 14]); ylim([-1 1.1]);
+plot(aux, mix_vozeada, '.', 'color', 'r'); xlabel("Tempo (s)"); ylabel('Presença de fala'); grid on; title("Deteção de momentos de fala"); xlim([0 21]); ylim([-1 1.1]);
 
 legend('Sinal', 'Presença de voz', 'vozeada', 'não vozeada', 'mix',  'Location', 'SouthEast');
 drawnow;
 
 
 
-
-
-% Import data from praat
-fileID = fopen('pitch_praat.txt','r');
-formatSpec = '%f';
-data = fscanf(fileID,formatSpec);
-figure(8);
-plot(data((data>50) & (data<500)), '.'); ylim([0 700]);
-fprintf("Tamanho pitch: %d\n", length(data));
 
 %Histograma
 categories = ["voz total" "vozeado" "mix" "não vozeado" "silencio"];
