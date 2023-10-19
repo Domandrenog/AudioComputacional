@@ -10,7 +10,6 @@ inputFileName = 'ASRF24.wav';
 [x, fs] = audioread(inputFileName); %fs = 44100Hz, we need 16000Hz
 fprintf("Length of the audio: %d\n", length(x));
 fprintf("Duration of the audio: %.2f\n", length(x)/fs);
-% Play the audio-> sound(x, fs); %(audio,frequency) 
 
 %Apply downsampling
 newFs = 16000; % Target sampling rate
@@ -103,13 +102,15 @@ for i = 1:numFrames
     end
 end
 
-%% plots Results
+%% Results plots
+
 % Convert from frame to time
 aux = (1:length(energy)) .* framestep;
 
 % Energy plot
 figure(2); plot(aux, 10*log(energy),'color', dark_green); xlabel("Tempo (s)"); ylabel('Energia (dB)'); grid on; title("Energia por Frame"); xlim([0 21]); drawnow;
 fprintf("Valor médio Energia: %.2f\n", mean(10*log10(abs(energy))));
+
 
 % Zero crossing plot
 figure(3); plot(aux, zeroCrossingRate, '.', 'color', dark_green); xlabel("Tempo (s)"); ylabel('Taxa de passagem'); grid on; title("Taxa de passagem por zero em cada janela"); xlim([0 21]); drawnow;
@@ -153,7 +154,9 @@ bar(categories, values);
 ylabel("Total de Ocurrências (%)");
 title("Ocurrência do tipo de voz e do silêncio");
 
+
 fprintf("End of the program.\n")
+
 
 %% Define a function to calculate F0 using autocorrelation
 function [f0, number_frame] = calculateF0Autocorrelation(frame, fs, number_frame)
