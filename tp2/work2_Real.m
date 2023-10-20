@@ -166,7 +166,7 @@ drawnow;
 categories = ["voz total" "vozeado" "mix" "não vozeado" "silencio"];
 values = [count(5) count(2) count(3) count(4) count(1)];
 figure(8);
-bar(categories, values);
+%bar(categories, values);
 ylabel("Total de Ocurrências");
 title("Ocurrência do tipo de voz e do silêncio");
 
