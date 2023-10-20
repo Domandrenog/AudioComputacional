@@ -85,6 +85,24 @@ hold on;
 plot(100*(1:length(decisao)) / newFs, decisao, '.', 'color', dark_orange); xlim([7, 9]); xlabel("Tempo (s)"); ylabel("Amplitude");
 title('Classificação: 0 - Indefinido, 1 - Silêncio, 3 - Ruido e 4 - Voz');
 
+ind = sum(decisao(decisao == 0)+1);
+sil = sum(decisao(decisao == 1));
+rui = sum(decisao(decisao == 3)/3);
+voz = sum(decisao(decisao == 4)/4);
+total = ind + sil + rui + voz;
+
+
+fprintf("\nDEBUG ind: %d | sil: %d | rui: %d | mix: | voz: %d | total: %d | tamanaho: %d\n", ind, sil, rui, voz, total, length(decisao));
+
+%Histograma
+categories = ["Indefinido" "Silêncio" "Ruido" "voz"];
+values = [ind/total, sil/total, rui/total, voz/total];
+figure(10);
+bar(categories, values);
+ylabel("Total de Ocurrências (%)");
+title("Ocurrência do tipo de voz e do silêncio");
+
+
 binEdges = 0:0.5:5; x = 0.3:1:4.3; novo_rotulo_x = {'Indefinido', 'Silêncio', '', 'Ruido', 'Voz'}; % Rotulos
 figure(7); histogram(decisao, binEdges, 'FaceColor', dark_blue); ylabel('Total de ocorrências'); xticks(x); xticklabels(novo_rotulo_x);
 title('Número de ocorrências de Indefinido, Silêncio, Ruido e Voz');
@@ -115,8 +133,32 @@ title('Classificação: 0-Indef. 1-Silê. 2-Ruído 2.5-N. Voze. 3-Mix 4-Voze.');
 
 figure; plot(t_y, y/max(y)*4, 'color', dark_blue);
 hold on;
-plot(100*(1:length(decisao)) / newFs, decisao, '.', 'color', dark_orange);xlim([7, 9]); xlabel("Tempo (s)"); ylabel("Amplitude");
+plot(100*(1:length(decisao)) / newFs, decisao, '.', 'color', dark_orange);xlim([12, 14]); xlabel("Tempo (s)"); ylabel("Amplitude");
 title('Classificação: 0-Indef. 1-Silê. 2-Ruído 2.5-N. Voze. 3-Mix 4-Voze.');
+
+ind = sum(decisao(decisao == 0)+1);
+sil = sum(decisao(decisao == 1));
+rui = sum(decisao(decisao == 2)/2);
+nd = sum(decisao(decisao == 2.5)/2.5);
+mix = sum(decisao(decisao == 3)/3);
+voz = sum(decisao(decisao == 4)/4);
+total = ind + sil + rui + nd + mix + voz;
+
+
+fprintf("\nDEBUG ind: %d | sil: %d | rui: %d | mix: %d | voz: %d | total: %d | tamanaho: %d\n", ind, sil, nd, mix, voz, total, length(decisao));
+
+%Histograma
+categories = ["Indefinido" "Silêncio" "Rui." "N. V." "Mix" "Vozeado"];
+values = [ind/total, sil/total, rui/total, nd/total, mix/total, voz/total];
+figure(9);
+bar(categories, values);
+ylabel("Total de Ocurrências (%)");
+title("Ocurrência do tipo de voz e do silêncio");
+
+
+
+
+
 
 binEdges = 0:0.5:5; x = [0.3, 1.3, 2.3, 2.81, 3.3, 4.3]; novo_rotulo_x = {'Indefinido', 'Silêncio', 'Rui.', 'N. V.', 'Mix', 'Vozeado'};
 figure(8); histogram(decisao, binEdges, 'FaceColor', dark_blue); ylabel('Total de ocorrências'); xticks(x); xticklabels(novo_rotulo_x);
