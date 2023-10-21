@@ -149,8 +149,9 @@ soma = count(5) + count(1);
 categories = ["voz total" "vozeado" "mix" "não vozeado" "silencio"];
 values = [count(5)/soma count(2)/soma count(3)/soma count(4)/soma count(1)/soma];
 figure(8);
-bar(categories, values);
-ylabel("Total de Ocurrências (%)");
+<<<<<<< HEAD
+%bar(categories, values);
+ylabel("Total de Ocurrências");
 title("Ocurrência do tipo de voz e do silêncio");
 
 fprintf("End of the program.\n")
