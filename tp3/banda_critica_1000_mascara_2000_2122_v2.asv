@@ -105,7 +105,7 @@ n=ellipord([wp1 wp2], [wp1/(4/3) wp2*(4/3)], 0.1, declive);
 figure(1)
 
 % Plot the original random signal
-subplot(2,2,1), plot(sinal); grid on; title('sinal aleatório');
+subplot(2,2,1), plot(sinal); grid on; title('sinal aleatÃ³rio');
 
 % Filter the signal using the elliptic filter
 sinalfiltrado=filter(B,A,sinal);
@@ -131,7 +131,7 @@ sinalfiltrado=sinalfiltrado*SF0/SF;
 SF=sqrt(sinalfiltrado'*sinalfiltrado/N);
 
 % Plot the filtered random signal
-subplot(2,2,2), plot(sinalfiltrado); grid on; title('sinal aleatório iterativamente filtrado');
+subplot(2,2,2), plot(sinalfiltrado); grid on; title('sinal aleatÃ³rio iterativamente filtrado');
 
 % Calculate and plot the spectra of the original and filtered signals
 SINALdB=20*log10(abs(SINAL));
@@ -224,19 +224,14 @@ while SF1<SF0
     
     % Plot the spectrum of the combined signal for a portion of the data
     plot((fsN)*(1:round(N/5)), SINALSOMAdB(1:round(N/5))); grid on; grid minor;
-    
     if m==1
-    V=axis; % Plot the spectrum of the combined signal for a portion of the data
+    V=axis;
     end
     axis(V);
-
-    % Increase the amplitude of the second sinusoidal signal by 2 dB
+    % increase amplitude by 2dB
     SF1=SF1*10^(2/20);
-    LdB=20*log10(SF1/SF0) % Calculate the increase in dB
-    
-    m=m+1; % Increment the iteration counter
-
-    % Pause for 3 seconds before the next iteration
+    LdB=20*log10(SF1/SF0)
+    m=m+1;
     pause(3) 
 end
     
