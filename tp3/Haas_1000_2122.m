@@ -20,6 +20,7 @@ clc
 % Deverá confirmar-se um efeito de re-aparecimento do som do 
 % canal 2 segundo o efeito de Haas, passando a direcção da fonte sonora a 
 % ser a do canal 2 quando no início da fase 2 era a do canal 1.
+
 fs=22050;
 f0=1000;
 FROitava=1/2;
