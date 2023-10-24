@@ -78,7 +78,7 @@ subplot(2,2,3)
 t=0:1/fs:(length(sinal1)-1)/fs;
 plot(t, sinal1,'b',t, sinal2,'r')
 sound([sinal1 sinal2],fs,16)
-pause(3)
+pause(6)
 m=m+1 
 iteracao=iteracao+1;
 end

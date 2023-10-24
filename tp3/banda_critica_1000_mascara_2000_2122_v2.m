@@ -90,7 +90,7 @@ while FROitava<FROitavafinal
     m
 
 % Calculate the bandwidth and frequencies for the elliptic filter design
-BW=f0*(2^FROitava-1)/2^(FROitava/2);
+BW=f0*(2^FROitava-1)/2^(FROitava/2)
 f1=f0/2^(FROitava/2);
 f2=f0*2^(FROitava/2);
 wp1=f1/(fs/2);
@@ -168,12 +168,12 @@ else
 end
 
 % Pause for 2 seconds before playing the target signal in the iteration
-pause(2)
+pause(1)
 
 % Play the target signal, which is a combination of the filtered signal and
 % a sinusoidal component scaled by 'S'.
 sound([sinalfiltrado+S*sinalsinusoidal,sinalfiltrado+S*sinalsinusoidal],fs,16)
-
+rms(sinalfiltrado)^2
 % Update the value of 'FROitava' for the next iteration, increasing it by
 % 'FROitavaStep'.
 FROitava=1/18+m*FROitavaStep
@@ -182,7 +182,7 @@ FROitava=1/18+m*FROitavaStep
 m=m+1;
 
 % Pause for 4 seconds before starting the next iteration
-pause(4)
+pause(3)
 end
 
 % Pause for an unspecified amount of time, likely to indicate the end of
