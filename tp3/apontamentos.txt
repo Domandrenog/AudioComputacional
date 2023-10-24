@@ -1,0 +1,1 @@
+Fo central está em 1000Hz e colocamos o ruido naquela posição com banda-pass.
