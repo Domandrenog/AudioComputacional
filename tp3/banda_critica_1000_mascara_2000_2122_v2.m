@@ -182,7 +182,8 @@ FROitava=1/18+m*FROitavaStep
 m=m+1;
 
 % Pause for 4 seconds before starting the next iteration
-pause(4)
+%pause(4)
+break
 end
 
 % Pause for an unspecified amount of time, likely to indicate the end of
