@@ -2,13 +2,14 @@
 % os formantes F1,F2,F3 e F4 e o Pitch F0. As larguras de banda são 
 %constantes. O sinal de saída é armazenado num ficheiro .wav.
 
-
+close all
+clear all
 
 Fs=11025;
 %jmax=max(size(vecFOR));
-jmax=100;
+jmax=75;
 janela=256;
-f0=100;
+f0=75;
 DF=1/Fs*janela;			% Duração de uma frame.
 Av=ones(1,jmax)*1;
 attack=2*round(0.2*Fs/256/2); 
@@ -17,13 +18,35 @@ e1=hanning(attack)';
 e2=hanning(decay)';
 envolvente=[e1(1:length(e1)/2) ones(1,jmax-length(e1)/2-length(e2)/2) e2(length(e2)/2+1:length(e2))];
 Av=Av.*envolvente;
-F0=ones(1,jmax)*f0;
-F1=ones(1,jmax)*308; % formantes da vogal i
-F2=ones(1,jmax)*867;
-F3=ones(1,jmax)*2500;
-F4=ones(1,jmax)*3500;
+F0_base=ones(1,jmax);
+F1_base=ones(1,jmax); % formantes da vogal i
+F2_base=ones(1,jmax);
+F3_base=ones(1,jmax);
+F4_base=ones(1,jmax);
+
+
+vogal_a = [f0 717 1089 2500 3500];
+vogal_e = [f0 554 1761 2500 3500];
+vogal_i = [f0 282 2238 2500 3500];
+vogal_o = [f0 470 1020 2500 3500];
+vogal_u = [f0 311 875 2500 3500];
+
+
+vogais = [vogal_i; vogal_i; vogal_u; vogal_u; vogal_u];
+
+
+
+for index_vogal=1:5
+
+    F0 = F0_base * vogais(index_vogal, 1);
+    F1 = F1_base * vogais(index_vogal, 2);
+    F2 = F2_base * vogais(index_vogal, 3);
+    F3 = F3_base * vogais(index_vogal, 4);
+    F4 = F4_base * vogais(index_vogal, 5);
 
 Ts=1/Fs;
+
+% Bandwidth
 B1=ones(1,jmax)*50*6.25;
 B2=ones(1,jmax)*75*6.25;
 B3=ones(1,jmax)*100*6.25;
@@ -59,7 +82,8 @@ voz=[];excit=[];
 %aglotal=0.9;			% Define a forma do impulso glotal
 %Bglotal=[0 -aglotal*exp(1)*log(aglotal)];
 %Aglotal=[1 -2*aglotal aglotal^2];
-for j=1:jmax,
+
+for j=1:jmax
  % j
   [sinalglotal,resto]=fgerimp(Fs,F0(j),janela,resto);
  % plot(sinal)
@@ -105,8 +129,17 @@ end;
     audiowrite('excitRowden.wav', excit, Fs, 'BitsPerSample', 16);
     %wavwrite(excit,Fs,16,'excitRowden.wav')
     
+    % NOSSO
+    if index_vogal == 1
+        voz_final = voz;
+    else
+        voz_final = horzcat(1,voz_final,voz);
+    end
+    %soundsc(voz,Fs);
+    %pause(2)
+end
 eixtemp=(0:jmax-1)*DF*1000/2;
-figure(2);
+figure;
 % x=fft(voz(length(voz)/2:length(voz)/2+*Fs/f0-1));
 %x=fft([voz(2980:3090) zeros(1,9*110 )]);
 %plot(20*log10(abs(x(1:10*Fs/f0/2))));pause
@@ -154,5 +187,5 @@ plot(20*log10((xx(2:round(length(xx)/2)))),'r');grid
 % end;
 % tocar=input('Deseja ouvir o sinal de saida (s ou S para sim)? ','s');
 % if ((tocar=='s') | (tocar=='S')),
-  soundsc(voz,Fs);
+  soundsc(voz_final,Fs);
 % end;

@@ -23,5 +23,5 @@ sinal=[sinal, zeros(1,i+salto-(janela-comp_res)-1)];
 sinal=filter(B,A,sinal);
 restos=sinal(janela-comp_res:length(sinal));
 sinal=[resto,sinal(1:janela-comp_res)];
-%plot(sinal)
-%pause
+figure(1); plot(sinal); title("RUBEN");
+pause
