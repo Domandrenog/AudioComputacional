@@ -84,6 +84,7 @@ voz=[];excit=[];
 
 for j=1:jmax
  % j
+ 
   [sinalglotal,resto]=fgerimp(Fs,F0(j),janela,resto);
  % plot(sinal)
    
@@ -129,9 +130,15 @@ end;
     %wavwrite(excit,Fs,16,'excitRowden.wav')
     
     % NOSSO
-    if index_vogal == 1
-        voz_final = voz;
-    else
+    fade = 0:ceil(length(voz)/10);
+    fader = sin(2*pi*10/(4*length(voz)).*fade);
+    voz(1:ceil(length(voz)/10)+1) = voz(1:ceil(length(voz)/10)+1).*fader;
+    voz(end-ceil(length(voz)/10):end)=voz(end-ceil(length(voz)/10):end).*fader(end:-1:1);
+
+    figure(1); plot(voz); title('voz');
+    if index_vogal == 1 voz_final = voz;
+        
+    else 
         voz_final = horzcat(1,voz_final,voz);
     end
     %soundsc(voz,Fs);
