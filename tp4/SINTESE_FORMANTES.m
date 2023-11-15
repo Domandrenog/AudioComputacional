@@ -9,7 +9,7 @@ Fs=11025;
 %jmax=max(size(vecFOR));
 jmax=75;
 janela=256;
-f0=75;
+f0=100;
 DF=1/Fs*janela;			% Duração de uma frame.
 Av=ones(1,jmax)*1;
 attack=2*round(0.2*Fs/256/2); 
@@ -32,17 +32,21 @@ vogal_o = [f0 470 1020 2500 3500];
 vogal_u = [f0 311 875 2500 3500];
 
 
-vogais = [vogal_u; vogal_a; vogal_u; vogal_a; vogal_u];
+vogais = [vogal_a; vogal_e; vogal_i; vogal_o; vogal_u];
 
+% Variáveis para controle da entonação
+f0_variation = 10; % Variação na frequência fundamental
+intonation_pattern = (tan(2 * pi * (1:jmax) / (30*jmax)).^2+ 1);
 
 
 for index_vogal=1:5
 
-    F0 = F0_base * vogais(index_vogal, 1);
+    F0 = F0_base * vogais(index_vogal, 1) .* intonation_pattern' + randn(1, jmax) * f0_variation;
     F1 = F1_base * vogais(index_vogal, 2);
     F2 = F2_base * vogais(index_vogal, 3);
     F3 = F3_base * vogais(index_vogal, 4);
     F4 = F4_base * vogais(index_vogal, 5);
+    
 
 Ts=1/Fs;
 % Bandwidth
@@ -113,6 +117,7 @@ for j=1:jmax
 
     [sinal,zf]=filter(BBB,A,sinal,zi);
     zi=zf;
+
     voz=[voz sinal];
     
 end;
@@ -130,10 +135,10 @@ end;
     %wavwrite(excit,Fs,16,'excitRowden.wav')
     
     % NOSSO
-    fade = 0:ceil(length(voz)/10);
-    fader = sin(2*pi*10/(4*length(voz)).*fade);
-    voz(1:ceil(length(voz)/10)+1) = voz(1:ceil(length(voz)/10)+1).*fader;
-    voz(end-ceil(length(voz)/10):end)=voz(end-ceil(length(voz)/10):end).*fader(end:-1:1);
+    %fade = 0:ceil(length(voz)/10);
+    %fader = sin(2*pi*10/(4*length(voz)).*fade);
+    %voz(1:ceil(length(voz)/10)+1) = voz(1:ceil(length(voz)/10)+1).*fader;
+    %voz(end-ceil(length(voz)/10):end)=voz(end-ceil(length(voz)/10):end).*fader(end:-1:1);
 
     figure(1); plot(voz); title('voz');
     if index_vogal == 1 voz_final = voz;
@@ -160,7 +165,8 @@ for i=1:1000
     xx=xx+abs(fft(saidaaleatoria));
 
 end
-plot(20*log10((xx(2:round(length(xx)/2)))),'r');grid
+
+figure(2); plot(20*log10((xx(2:round(length(xx)/2)))),'r');grid
 
 % % plot(eixtemp,F1(1:jmax),'bo',eixtemp,F2(1:jmax),'ro',eixtemp,F3(1:jmax),'go',eixtemp,F4(1:jmax),'ko');
 % % title('Formantes');ylabel('Hz');xlabel('mseg');
