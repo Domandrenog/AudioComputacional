@@ -9,7 +9,7 @@ Fs=11025;
 %jmax=max(size(vecFOR));
 jmax=75;
 janela=256;
-f0=100;
+f0=110;
 DF=1/Fs*janela;			% Duração de uma frame.
 Av=ones(1,jmax)*1;
 attack=2*round(0.2*Fs/256/2); 
@@ -35,8 +35,8 @@ vogal_u = [f0 311 875 2500 3500];
 vogais = [vogal_a; vogal_e; vogal_i; vogal_o; vogal_u];
 
 % Variáveis para controle da entonação
-f0_variation = 5; % Variação na frequência fundamental
-intonation_pattern = (tan(2 * pi * (1:jmax) / (40*jmax)).^2+ 1);
+f0_variation = 10; % Variação na frequência fundamental
+intonation_pattern = (tan(2 * pi * (1:jmax) / (30*jmax)).^2+ 1);
 
 
 
@@ -127,7 +127,7 @@ for j=1:jmax
     shimmer_phase = rand * 2 * pi;
     
     % Generate the shimmer modulation signal
-    shimmer_signal = log(2 * pi * (1:length(voz)) + shimmer_phase);
+    shimmer_signal = log(0.001 * (1:length(voz)) + shimmer_phase);
     
     % Modulate the audio signal with the shimmer signal
     voz = voz .* (1 + shimmer_depth * shimmer_signal);
