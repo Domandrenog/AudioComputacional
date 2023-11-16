@@ -35,8 +35,9 @@ vogal_u = [f0 311 875 2500 3500];
 vogais = [vogal_a; vogal_e; vogal_i; vogal_o; vogal_u];
 
 % Variáveis para controle da entonação
-f0_variation = 10; % Variação na frequência fundamental
-intonation_pattern = (tan(2 * pi * (1:jmax) / (30*jmax)).^2+ 1);
+f0_variation = 5; % Variação na frequência fundamental
+intonation_pattern = (tan(2 * pi * (1:jmax) / (40*jmax)).^2+ 1);
+
 
 
 for index_vogal=1:5
@@ -118,6 +119,20 @@ for j=1:jmax
     [sinal,zf]=filter(BBB,A,sinal,zi);
     zi=zf;
 
+
+    % Calculate the shimmer modulation depth
+    shimmer_depth = 0.01;  % Shimmer modulation depth as a percentage of the signal amplitude
+    
+    % Generate a random shimmer phase
+    shimmer_phase = rand * 2 * pi;
+    
+    % Generate the shimmer modulation signal
+    shimmer_signal = log(2 * pi * (1:length(voz)) + shimmer_phase);
+    
+    % Modulate the audio signal with the shimmer signal
+    voz = voz .* (1 + shimmer_depth * shimmer_signal);
+
+     
     voz=[voz sinal];
     
 end;
@@ -131,7 +146,6 @@ end;
     voz=voz/abs(max(voz));
     voz=detrend(voz);
     excit=detrend(excit/abs(max(excit)));
-    audiowrite('excitRowden.wav', excit, Fs, 'BitsPerSample', 16);
     %wavwrite(excit,Fs,16,'excitRowden.wav')
     
     % NOSSO
@@ -199,5 +213,7 @@ figure(2); plot(20*log10((xx(2:round(length(xx)/2)))),'r');grid
 % end;
 % tocar=input('Deseja ouvir o sinal de saida (s ou S para sim)? ','s');
 % if ((tocar=='s') | (tocar=='S')),
+audiowrite('excitRowden.wav', voz_final, Fs, 'BitsPerSample', 16);
+
   soundsc(voz_final,Fs);
 % end;
