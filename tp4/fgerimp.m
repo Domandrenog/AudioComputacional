@@ -12,6 +12,7 @@ B=[0 -a*exp(1)*log(a)];
 A=[1 -2*a a^2];
 comp_res=length(resto);
 sinal=zeros(1,janela-comp_res);
+if janela-comp_res < 0; disp(f0); end
 for i=1:salto:(janela-comp_res);sinal(i)=1;end
 %plot(sinal)
 %sinal
