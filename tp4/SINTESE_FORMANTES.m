@@ -37,11 +37,27 @@ vogais = [vogal_a; vogal_e; vogal_i; vogal_o; vogal_u];
 % Variáveis para controle da entonação
 f0_variation = 10; % Variação na frequência fundamental
 
-f0s_a = [130.6 130.6 130.1 127.8 127.2 127.2 127.9 128 126.9 125.8 126.7 126.7 128.9 128.9 132.6 141.6 151.7 164.7 174.5 184.7 195.1 206.6 213.6 215.8 211.9];
-f0s_e = [153.623129 153.623129 146.960870 140.370521 140.370521 136.926368 135.752539 134.685646 133.521685 133.521685 132.988386 133.540377 136.205226 136.205226 139.121941 143.130324 158.526358 170.676249 185.919617 185.919617 189.431869 188.229844 197.370804 273.771325 272.211748];
-f0s_i = [165.529679 155.489195 145.367643 141.330724 137.888851 135.840278 134.044437 132.627044 131.869613 131.298118 131.849950 134.701826 141.169847 151.575120 172.566818 194.334489 200.867166 203.117766 209.134577 68.061238 68.154549 66.219352 66.022771 68.058856 67.912860];
-f0s_o = [141.190756 141.190756 138.193705 138.193705 136.325163 135.213312 134.288883 134.288883 133.148211 132.447730 132.447730 133.000017 135.060893 135.060893 139.212278 139.212278 139.212278 145.688063 145.688063 152.736116 267.074243 267.074243 263.961065 263.961065 272.654246];
-f0s_u = [346.439840 301.632439 301.632439 256.882958 238.775835 215.549578 215.549578 202.685922 200.277844 203.763479 203.763479 206.344648 205.098748 200.765585 194.598817 188.032307 188.032307 180.826264 171.752779 171.752779 167.261050 145.230905 145.230905 131.465033 130.868267];
+% Define the provided data
+f0s_a = [130.652902 129.792837 127.617600 128.032236 128.031624 ...
+    125.818815 126.719102 128.855329 132.072028 140.950202 153.492546 ...
+    164.356671 174.122222 185.068774 196.797003 208.729564 213.546964 215.945243 ...
+    210.628151];
+
+f0s_e = [161.162044 150.266963 144.445977 138.865170 136.402374 135.310008 ...
+    134.235979 133.308250 132.885811 134.417178 137.259519 140.203362 146.427843 ...
+    167.493606 172.909759 189.124775 188.843317 190.262729 197.973217];
+
+f0s_i = [162.431440 152.019370 144.102354 139.998581 137.333663 ...
+    135.267789 133.562315 132.444873 131.643708 131.306798 132.286085 136.099728 ...
+    143.343532 157.460723 177.639666 197.278338 201.492484 205.350839 209.517199];
+
+f0s_o = [f0 f0 f0 f0 f0 f0 146.474488 140.617081 137.899491 136.109887 ...
+    135.084352 134.161891 132.970896 132.442424 133.204652 135.480687 140.078137 ...
+    146.614253 153.681792];
+
+f0s_u = [358.516837 337.485500 282.342173 251.035518 231.423290 210.495196 ...
+    200.893304 204.985032 206.284673 204.102074 198.904664 192.627239 ...
+    186.040405 177.752489 170.559534 161.702249 140.390297 130.304218 67.166573];
 
 fprintf("a: %d | e: %d | i: %d | o: %d | u: %d\n", length(f0s_a), length(f0s_e),length(f0s_i), length(f0s_o), length(f0s_u));
 
@@ -51,20 +67,24 @@ f0s_i = interp1(1:length(f0s_i), f0s_i, 1:1/jmax:length(f0s_i));
 f0s_o = interp1(1:length(f0s_o), f0s_o, 1:1/jmax:length(f0s_o));
 f0s_u = interp1(1:length(f0s_u), f0s_u, 1:1/jmax:length(f0s_u));
 
-f0s_vector = [f0s_a; f0s_e; f0s_i; f0s_o; f0s_u];
+f0s_vector = [f0s_a; f0s_e; f0s_i; f0s_o; f0s_o];
 %figure(3); plot(x, f0s, '-o', 1:1/jmax:length(f0s), f0s_inter, '.'); 
-
+jitter_strength = 0.5;
 
 % Ver modelo Fujisaki
 
 
 for index_vogal=1:5
     f0s_inter = f0s_vector(index_vogal,:);
-    
+
+    % Introduce pitch jitter
+    jitter = jitter_strength * randn(size(f0s_inter));
+    f0s_inter_jittered = f0s_inter + jitter;
+
     figure(3); subplot(5,1, index_vogal); plot(f0s_inter, '.'); title("fundamental frequencies");
 
 
-    F0 = f0s_inter; %* vogais(index_vogal, 1) ;%.* intonation_pattern' + randn(1, jmax) * f0_variation;
+    F0 = f0s_inter_jittered;
     F1 = F1_base * vogais(index_vogal, 2);
     F2 = F2_base * vogais(index_vogal, 3);
     F3 = F3_base * vogais(index_vogal, 4);
@@ -147,13 +167,14 @@ for j=1:jmax
     shimmer_phase = rand * 2 * pi;
     
     % Generate the shimmer modulation signal
-    shimmer_signal = log(0.001 * (1:length(voz)) + shimmer_phase);
+    shimmer_signal = 2*sin(0.001 * (1:length(voz)) + shimmer_phase);
     
     % Modulate the audio signal with the shimmer signal
     voz = voz .* (1 + shimmer_depth * shimmer_signal);
-
-     
-    voz=[voz sinal];
+    
+    
+    
+    voz=[voz awgn(sinal, 60)];
     
 end;
 
@@ -233,7 +254,7 @@ figure(2); plot(20*log10((xx(2:round(length(xx)/2)))),'r');grid
 % end;
 % tocar=input('Deseja ouvir o sinal de saida (s ou S para sim)? ','s');
 % if ((tocar=='s') | (tocar=='S')),
-%audiowrite('excitRowden.wav', voz_final, Fs, 'BitsPerSample', 16);
+audiowrite('excitRowdenV2.wav', voz_final, Fs, 'BitsPerSample', 16);
 
-  soundsc(voz_final,Fs);
+soundsc(voz_final,Fs);
 % end;
