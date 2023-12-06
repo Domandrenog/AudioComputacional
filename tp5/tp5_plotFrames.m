@@ -57,7 +57,7 @@ for i = 0:num_frames
     
     reconstructed_frame = filter(1, lpc_coeffs(i+1, :), r(i+1,:));
     
-    reconstructed_signal(i*step + 1 : i*step + length(window)) = (reconstructed_signal(i*step + 1 : i*step + length(window)) + reconstructed_frame');
+    reconstructed_signal(i*step + 1 : i*step + length(window)) = (reconstructed_signal(i*step + 1 : i*step + length(window)) + r(i+1,:)');
     
     %figure; 
     %subplot(4,1,1); plot(y_preemph(1:i*step + length(window))); title("Original signal")

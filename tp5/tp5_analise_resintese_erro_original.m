@@ -38,6 +38,7 @@ num_frames = floor((length(y_preemph) - length(window)) / step);
 lpc_coeffs = zeros(num_frames, p+1);
 r = zeros(num_frames, length(window));
 reconstructed_signal_np = zeros(size(y_preemph));
+reconstructed_signal_residual = zeros(size(y_preemph));
 
 % Gets coeficients and residuals for each frame
 for i = 0:num_frames
@@ -47,7 +48,8 @@ for i = 0:num_frames
     r(i+1,:) = filter(lpc_coeffs(i+1, :), 1, frame);
     reconstructed_frame = filter(1, lpc_coeffs(i+1, :), r(i+1,:));
     reconstructed_signal_np(i*step + 1 : i*step + length(window)) = (reconstructed_signal_np(i*step + 1 : i*step + length(window)) + reconstructed_frame');
-    
+    reconstructed_signal_residual(i*step + 1 : i*step + length(window)) = (reconstructed_signal_residual(i*step + 1 : i*step + length(window)) + r(i+1,:)');
+
 end
 
 figure; subplot(2,1,1); plot(x, y_preemph, 'color', dark_blue); title("Sinal Original"); xlabel("time (s)");
@@ -55,7 +57,7 @@ subplot(2,1,2); plot(x, reconstructed_signal_np, 'Color', dark_green); title("Si
 sgtitle("Sinal Original vs Sinal Re-sintetizado sem Pré-Enfase");
 
 figure;
-plot(x(0.1*fs:19.1*fs), r(0.1*fs:19.1*fs), 'LineWidth', 1.5, 'color', dark_blue);
+plot(x, reconstructed_signal_residual, 'LineWidth', 1.5, 'color', dark_blue);
 xlim([0.1 19.1]); title("Sinal Erro"); xlabel('Tempo (s)'); ylabel('Amplitude');
 
 
@@ -67,7 +69,7 @@ audiowrite(nome_arquivo, reconstructed_signal_np, fs);
 % Nome do arquivo de áudio para salvar
 nome_arquivo = 'Sinal_Erro.wav';
 % Salvando o sinal de áudio
-audiowrite(nome_arquivo, r(0.1*fs:19.1*fs), fs);
+audiowrite(nome_arquivo, reconstructed_signal_residual, fs);
 
 %%%%
 %%%%
@@ -123,7 +125,7 @@ sgtitle("Sinal Original vs Sinal Re-sintetizado com Pré-Enfase");
 % Nome do arquivo de áudio para salvar
 nome_arquivo = 'Sinal_Re_sintetizado_com_Pré_Enfase.wav';
 % Salvando o sinal de áudio
-audiowrite(nome_arquivo, reconstructed_signal_np, fs);
+audiowrite(nome_arquivo, reconstructed_signal, fs);
 
 
 %%Comparação entre Pré-Enfase e sem Pré-Enfase
