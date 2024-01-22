@@ -1,0 +1,3 @@
+([('PerfectPitch',
+   '/Users/andbrarata/Desktop/FEUP_git/Multimedia-Systems/Project/dist/PerfectPitch',
+   'EXECUTABLE')],)
