@@ -4,7 +4,7 @@ clc
 
 
 audio_name = './audios/Acustic_piano_record_MacOS.wav';
-audio_name = './audios/c_major_sine.wav';
+%audio_name = './audios/c_major_sine.wav';
 audio_name = './audios/Acustic_piano_batimento_record_MacOS.wav';
 
 % Read an MP3 file
@@ -51,7 +51,7 @@ function plot_spectrogram(data, fs, window_size, overlap, nfft)
     if ~exist('nfft', 'var') nfft = 1024; end
     y = reshape(data, [], 1);
     [S, f, t] = spectrogram(y, window_size, overlap, nfft, fs);
-    figure(2); imagesc(t, f, 10*log10(abs(S))); axis xy; colormap("gray"); colorbar; xlabel('Time (s)'); ylabel('Frequency (Hz)'); title('C note on Piano'); ylim([10, 10^3]);
+    figure(2); imagesc(t, f, 10*log10(abs(S))); axis xy; colormap(g); colorbar; xlabel('Time (s)'); ylabel('Frequency (Hz)'); title('C note on Piano'); ylim([10, 10^3]);
 
 
 end

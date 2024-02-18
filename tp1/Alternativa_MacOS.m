@@ -59,14 +59,14 @@ function plot_fft(data, fs)
     C_notes = [261.63, 293.66, 329.63, 349.23, 392, 440, 493.88, 523.25];
     % Plot the waveform
     figure(1); plot(f,10*log(abs(Y)), 'color', dark_blue); xlabel('Frequency (Hz)'); ylabel('Magnitude (dB)'); title('FFT of C sclae with sine waves'); set(gca, 'XScale', 'log'); xlim([10, 10^3]);
-    text(C_notes(1), 10*log(5000), 'C', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
-    text(C_notes(2), 10*log(5000), 'D', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
-    text(C_notes(3), 10*log(5000), 'E', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
-    text(C_notes(4), 10*log(5000), 'F', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
-    text(C_notes(5), 10*log(5000), 'G', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
-    text(C_notes(6), 10*log(5000), 'A', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
-    text(C_notes(7), 10*log(5000), 'B', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
-    text(C_notes(8), 10*log(5000), 'C', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
+    text(C_notes(1), 20*log(5000), 'C', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
+    text(C_notes(2), 20*log(5000), 'D', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
+    text(C_notes(3), 20*log(5000), 'E', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
+    text(C_notes(4), 20*log(5000), 'F', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
+    text(C_notes(5), 20*log(5000), 'G', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
+    text(C_notes(6), 20*log(5000), 'A', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
+    text(C_notes(7), 20*log(5000), 'B', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
+    text(C_notes(8), 20*log(5000), 'C', 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
 end
 
 function plot_spectrogram(data, fs, window_size, overlap, nfft)
